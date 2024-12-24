@@ -19,9 +19,11 @@ import org.koin.core.module.dsl.viewModelOf
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
+val ClientId = generateNonce()
+
 val Intercept = createClientPlugin("Intercept") {
     onRequest { request, _ ->
-        request.parameter("client_id", generateNonce())
+        request.parameter("client_id", ClientId)
     }
 }
 
