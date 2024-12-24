@@ -23,7 +23,8 @@ sealed interface GameEvent {
     data class NextMove(
         val by: PieceColor,
         val lastMoveFrom: Int,
-        val lastMoveTo: Int
+        val lastMoveTo: Int,
+        val kingCheckIndex: Int,
     ): GameEvent
 
     data class SelectionResult(

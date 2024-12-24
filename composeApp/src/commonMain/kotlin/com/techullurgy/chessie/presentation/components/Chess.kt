@@ -14,6 +14,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.unit.Constraints
 import com.techullurgy.chessie.domain.Piece
@@ -30,6 +33,7 @@ fun ChessBoard(
     availableIndicesForMove: List<Int>,
     lastMoveFrom: Int,
     lastMoveTo: Int,
+    kingCheckIndex: Int,
     onCellSelected: (Int) -> Unit,
     onDestinationSelected: (Int) -> Unit,
     onResetSelection: () -> Unit,
@@ -63,6 +67,8 @@ fun ChessBoard(
                         .background(
                             if(index == selectedIndex) {
                                 Color.Blue
+                            } else if(index == kingCheckIndex) {
+                                Color.Red
                             } else if (availableIndicesForMove.contains(index)) {
                                 Color.Magenta
                             } else if ((index/8) % 2 == 0) {
@@ -81,10 +87,10 @@ fun ChessBoard(
                         )
                         .drawBehind {
                             if(index == lastMoveFrom) {
-                                drawCircle(Color.Blue)
+                                lastMoveFromIndicator(Color.Blue)
                             }
                             if(index == lastMoveTo) {
-                                drawCircle(Color.Red)
+                                lastMoveToIndicator(Color.Blue)
                             }
                         }
                         .clickable(
@@ -105,4 +111,42 @@ fun ChessBoard(
             }
         }
     }
+}
+
+private fun DrawScope.lastMoveFromIndicator(color: Color) {
+    val path = Path().apply {
+        val padding = size.width * 0.1f
+        moveTo(padding, padding)
+        cubicTo(
+            center.x - padding*2f,
+            center.y + padding*2f,
+            center.x + padding*2f,
+            center.y - padding*2f,
+            padding,
+            padding
+        )
+    }
+    rotate(0f) { drawPath(path, color) }
+    rotate(90f) { drawPath(path, color) }
+    rotate(180f) { drawPath(path, color) }
+    rotate(270f) { drawPath(path, color) }
+}
+
+private fun DrawScope.lastMoveToIndicator(color: Color) {
+    val path = Path().apply {
+        val padding = size.width * 0.1f
+        moveTo(padding, padding)
+        lineTo(padding, center.y)
+        quadraticTo(
+            padding,
+            padding,
+            center.x,
+            padding
+        )
+        close()
+    }
+    rotate(0f) { drawPath(path, color) }
+    rotate(90f) { drawPath(path, color) }
+    rotate(180f) { drawPath(path, color) }
+    rotate(270f) { drawPath(path, color) }
 }

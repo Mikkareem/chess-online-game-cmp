@@ -38,6 +38,7 @@ fun GameScreen() {
                     lastMoveFrom = state.lastMoveFrom,
                     lastMoveTo = state.lastMoveTo,
                     selectedIndex = state.selectedIndex,
+                    kingCheckIndex = state.kingCheckIndex,
                     onCellSelected = { viewModel.onAction(GameAction.OnSelectionDone(it)) },
                     onDestinationSelected = { viewModel.onAction(GameAction.OnDestinationSelected(it)) },
                     onResetSelection = { viewModel.onAction(GameAction.OnResetSelection) }

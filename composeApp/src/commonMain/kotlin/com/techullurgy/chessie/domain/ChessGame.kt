@@ -35,6 +35,9 @@ data class ChessGame(val currentRoom: String, val userName: String) {
     private val _lastMoveTo = MutableStateFlow(-1)
     val lastMoveTo = _lastMoveTo.asStateFlow()
 
+    private val _kingCheckIndex = MutableStateFlow(-1)
+    val kingCheckIndex = _kingCheckIndex.asStateFlow()
+
     fun gameLoading() {
         _isGameLoading.value = true
     }
@@ -50,6 +53,7 @@ data class ChessGame(val currentRoom: String, val userName: String) {
             _isMyTurn.value = true
         }
         _availableIndicesForMove.value = emptyList()
+        _kingCheckIndex.value = -1
     }
 
     fun moveDone(event: GameEvent.MoveDone) {
@@ -62,6 +66,7 @@ data class ChessGame(val currentRoom: String, val userName: String) {
         _board.value = newBoard
         _selectedIndexForMove.value = -1
         _availableIndicesForMove.value = emptyList()
+        _isMyTurn.value = false
     }
 
     fun timerUpdate(event: GameEvent.TimerUpdate) {
@@ -82,6 +87,7 @@ data class ChessGame(val currentRoom: String, val userName: String) {
         _isMyTurn.value = _assignedColor.value == event.by
         _lastMoveFrom.value = event.lastMoveFrom
         _lastMoveTo.value = event.lastMoveTo
+        _kingCheckIndex.value = event.kingCheckIndex
     }
 
     fun selectionResult(event: GameEvent.SelectionResult) {

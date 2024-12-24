@@ -99,6 +99,13 @@ class GameViewModel(
             send(gameState)
         }.launchIn(this)
 
+        repository.game.kingCheckIndex.onEach { index ->
+            gameState = gameState.copy(
+                kingCheckIndex = index
+            )
+            send(gameState)
+        }.launchIn(this)
+
         awaitClose {}
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), GameState())
 
@@ -135,6 +142,7 @@ data class GameState(
     val opponentLastMoveFrom: Int = -1,
     val opponentLastMoveTo: Int = -1,
     val pieceColor: PieceColor? = null,
+    val kingCheckIndex: Int = -1,
 
     val isMyTurn: Boolean = false,
     val selectedIndex: Int = -1,

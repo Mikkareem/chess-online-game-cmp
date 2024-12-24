@@ -130,7 +130,8 @@ class ChessGameApi(
                             GameEvent.NextMove(
                                 by = eventReceived.by,
                                 lastMoveFrom = eventReceived.previousMoveFrom,
-                                lastMoveTo = eventReceived.previousMoveTo
+                                lastMoveTo = eventReceived.previousMoveTo,
+                                kingCheckIndex = eventReceived.oppositeKingInCheckIndex
                             )
                         )
 
